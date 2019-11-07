@@ -442,6 +442,10 @@
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIPAddresses/', variables('lbPublicIPName'))]"
             ],
+            "sku": {
+				"name": "Standard",
+				"tier": "Regional"
+			},
             "properties": {
                 "frontendIPConfigurations": [
                     {
