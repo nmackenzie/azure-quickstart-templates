@@ -271,6 +271,10 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[variables('lbPublicIPName')]",
             "location": "[parameters('location')]",
+            "sku": {
+				"name": "Standard",
+				"tier": "Regional"
+			},
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
