@@ -36,6 +36,9 @@
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('virtualNetworkName')]",
       "location": "[parameters('location')]",
+      "dependsOn": [
+				"[resourceId('Microsoft.Network/networkSecurityGroups', 'nsgName'))]"
+			],
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -46,12 +49,38 @@
           {
             "name": "[parameters('dbSubnetName')]",
             "properties": {
-              "addressPrefix": "[parameters('dbSubnetAddressPrefix')]"
+              "addressPrefix": "[parameters('dbSubnetAddressPrefix')]",
+              "networkSecurityGroup": {
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsgName'))]"
+							}
             }
           }
         ]
       }
-    }
+    },
+    {
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"name": "nsgName",
+			"apiVersion": "2019-07-01",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"securityRules": [{
+					"name": "Port22",
+					"properties": {
+						"description": "Allow SSH",
+						"protocol": "Tcp",
+						"sourcePortRange": "*",
+						"destinationPortRange": "22",
+						"sourceAddressPrefix": "*",
+						"destinationAddressPrefix": "VirtualNetwork",
+						"access": "Allow",
+						"priority": 1000,
+						"direction": "Inbound"
+					}
+				}]
+			}
+		}
+
   ],
   "outputs": {
     "dbSubnetRef": {
