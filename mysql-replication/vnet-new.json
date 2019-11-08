@@ -37,7 +37,7 @@
       "name": "[parameters('virtualNetworkName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-				"[resourceId('Microsoft.Network/networkSecurityGroups', 'nsgName'))]"
+				"[resourceId('Microsoft.Network/networkSecurityGroups', 'nsgName')]"
 			],
       "properties": {
         "addressSpace": {
@@ -51,7 +51,7 @@
             "properties": {
               "addressPrefix": "[parameters('dbSubnetAddressPrefix')]",
               "networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsgName'))]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsgName')]"
 							}
             }
           }
