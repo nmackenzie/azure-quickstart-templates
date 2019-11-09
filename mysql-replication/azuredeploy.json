@@ -320,7 +320,7 @@
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
-                                    "id": "[variables('ilbBackendAddressPoolName')]"
+                                    "id": "[variables('ilbBackendAddressPoolID')]"
                                 }
                             ],
                             "loadBalancerInboundNatRules": [
