@@ -320,7 +320,7 @@
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
-                                    "id": "[variables('ilbBackendAddressPoolID')]"
+                                    "id": "[variables('ilbBackendAddressPoolName')]"
                                 }
                             ],
                             "loadBalancerInboundNatRules": [
@@ -537,6 +537,25 @@
                             "frontendPort": "[parameters('mysqlProbePort1')]",
                             "backendPort": 9200,
                             "enableFloatingIP": false
+                        }
+                    }
+                ],
+                "outboundRules": [
+                    {
+                        "name": "outboundrule",
+                        "properties": {
+                            "allocatedOutboundPorts": 10000,
+                            "protocol": "All",
+                            "enableTcpReset": false,
+                            "idleTimeoutInMinutes": 15,
+                            "backendAddressPool": {
+                                "id": "[variables('ilbBackendAddressPoolID')]"
+                            },
+                            "frontendIPConfigurations": [
+                                {
+                                    "id": "[variables('sshIPConfig')]"
+                                }
+                            ]
                         }
                     }
                 ]
