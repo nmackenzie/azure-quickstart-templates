@@ -234,7 +234,9 @@
         "sa": "[parameters('dbSubnetStartAddress')]",
         "ipOctet01": "[concat(split(variables('sa'), '.')[0], '.', split(variables('sa'), '.')[1], '.')]",
         "ipOctet2": "[int(split(variables('sa'), '.')[2])]",
-        "ipOctet3": "[int(split(variables('sa'), '.')[3])]"
+        "ipOctet3": "[int(split(variables('sa'), '.')[3])]",
+        "healthProbeName": "[concat(variables('resourceGroupName'), '-httpProbe')]",
+		"healthProbeId": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadBalancerName'), variables('healthProbeName'))]"
     },
     "resources": [
         {
@@ -466,6 +468,38 @@
                         "name": "[variables('ilbBackendAddressPoolName')]"
                     }
                 ],
+                "probes": [{
+					"name": "[variables('healthProbeName')]",
+					"properties": {
+						"protocol": "Http",
+						"port": 9200,
+						"requestPath": "/",
+						"intervalInSeconds": 5,
+						"numberOfProbes": 2
+					}
+                }],
+                "loadBalancingRules": [{
+					"name": "MySQL",
+					"properties": {
+						"frontendIPConfiguration": {
+                            "id": "[variables('sshIPConfig')]"
+						},
+						"frontendPort": 3306,
+						"backendPort": 3306,
+						"enableFloatingIP": false,
+						"idleTimeoutInMinutes": 4,
+						"protocol": "Tcp",
+						"enableTcpReset": false,
+						"loadDistribution": "Default",
+						"disableOutboundSnat": true,
+						"backendAddressPool": {
+							"id": "[variables('ilbBackendAddressPoolID')]"
+						},
+						"probe": {
+							"id": "[variables('healthProbeId')]"
+						}
+					}
+				}],
                 "inboundNatRules": [
                     {
                         "name": "[concat(parameters('dnsName'),'NatRule0')]",
@@ -499,7 +533,7 @@
                             },
                             "protocol": "Tcp",
                             "frontendPort": "[parameters('mysqlFrontEndPort0')]",
-                            "backendPort": 3306,
+                            "backendPort": 33306,
                             "enableFloatingIP": false
                         }
                     },
@@ -511,7 +545,7 @@
                             },
                             "protocol": "Tcp",
                             "frontendPort": "[parameters('mysqlFrontEndPort1')]",
-                            "backendPort": 3306,
+                            "backendPort": 33306,
                             "enableFloatingIP": false
                         }
                     },
