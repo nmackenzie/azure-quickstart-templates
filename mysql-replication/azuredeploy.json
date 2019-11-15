@@ -236,8 +236,9 @@
         "ipOctet2": "[int(split(variables('sa'), '.')[2])]",
         "ipOctet3": "[int(split(variables('sa'), '.')[3])]",
         "resourceGroupName": "[toLower(resourceGroup().name)]",
+        "Name": "[toLower(resourceGroup().name)]",
         "healthProbeName": "[concat(variables('resourceGroupName'), '-httpProbe')]",
-		"healthProbeId": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadBalancerName'), variables('healthProbeName'))]"
+		"healthProbeId": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('lbName'), variables('healthProbeName'))]"
     },
     "resources": [
         {
